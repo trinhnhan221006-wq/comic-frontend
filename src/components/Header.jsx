@@ -16,7 +16,7 @@ const Header = () => {
                     <nav className="main-nav">
                         {/* Thêm class "active" cho trang hiện tại để có gạch chân */}
                         <Link to="/" className="nav-link active">TRANG CHỦ</Link>
-                        <Link to="/danh-sach" className="nav-link">DANH SÁCH</Link>
+                        <Link to="/Danhsach" className="nav-link">DANH SÁCH</Link>
                     </nav>
                 </div>
 

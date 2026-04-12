@@ -1,0 +1,60 @@
+body {
+  background: #0f172a;
+}
+
+.container {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+.btn-search {
+  padding: 10px 20px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.box {
+  border: 1px solid #555;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.grid label {
+  width: 150px;
+  font-size: 14px;
+}
+
+.content {
+  text-align: center;
+  margin-top: 20px;
+}
