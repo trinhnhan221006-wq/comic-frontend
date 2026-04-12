@@ -1,0 +1,192 @@
+/* =========================================
+   BỐ CỤC CHUNG TRANG CHỦ (2 CỘT)
+   ========================================= */
+.home-layout {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 30px; /* Khoảng cách giữa 2 cột */
+  align-items: flex-start;
+}
+
+.main-content {
+  flex: 1; /* Chiếm toàn bộ không gian còn lại */
+}
+
+.sidebar {
+  width: 320px; /* Cố định cột bên phải */
+  flex-shrink: 0;
+}
+
+.section-title {
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.section-title span {
+  border-bottom: 2px solid #e50914; /* Gạch đít màu đỏ giống Góc Truyện */
+  padding-bottom: 11px;
+}
+
+/* =========================================
+   CỘT TRÁI: LƯỚI TRUYỆN (Giống Góc Truyện Tranh)
+   ========================================= */
+.comic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.comic-card-dark {
+  background-color: #1a1a1a;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.comic-card-dark:hover {
+  transform: translateY(-5px);
+}
+
+.card-thumb {
+  position: relative;
+  height: 240px;
+}
+
+.card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Khối đen mờ che đè lên chân ảnh để hiện View/Like */
+.card-stats {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  padding: 20px 10px 5px;
+  color: #ccc;
+  font-size: 0.75rem;
+  display: flex;
+  gap: 10px;
+}
+
+.card-info {
+  padding: 10px;
+}
+
+.card-info h3 {
+  color: #fff;
+  font-size: 0.95rem;
+  margin: 0 0 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.chapter-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.chapter-name { color: #fff; }
+.chapter-time { color: #777; font-style: italic; }
+
+/* =========================================
+   CỘT PHẢI: BẢNG XẾP HẠNG (Giống NetTruyen)
+   ========================================= */
+.top-widget {
+  background-color: #1a1a1a;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.top-tabs {
+  display: flex;
+  background-color: #222;
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 12px 0;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: #e50914;
+  border-bottom: 2px solid #e50914;
+  background-color: #1a1a1a;
+}
+
+.top-list {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.top-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px dashed #333;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.top-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.top-rank {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #555;
+  width: 30px;
+}
+
+/* Số 1, 2, 3 có màu nổi bật */
+.top-item:nth-child(1) .top-rank { color: #e50914; }
+.top-item:nth-child(2) .top-rank { color: #00c853; }
+.top-item:nth-child(3) .top-rank { color: #29b6f6; }
+
+.top-thumb {
+  width: 50px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.top-detail h4 {
+  color: #fff;
+  font-size: 0.9rem;
+  margin: 0 0 5px 0;
+}
+
+.top-detail p {
+  color: #aaa;
+  font-size: 0.8rem;
+  margin: 0;
+}

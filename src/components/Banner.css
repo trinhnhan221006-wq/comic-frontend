@@ -1,0 +1,161 @@
+/* =========================================
+   STYLE CHO BANNER (HERO CAROUSEL)
+   ========================================= */
+.banner-wrapper {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  background-color: #0a0a0a;
+}
+
+/* Hiệu ứng nền mờ (Lấy ảnh hiện tại phóng to và blur) */
+.banner-bg-blur {
+  position: absolute;
+  top: -20px; left: -20px; right: -20px; bottom: -20px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(40px) brightness(0.3); /* Làm mờ và tối đi */
+  z-index: 1;
+  transition: background-image 0.5s ease;
+}
+
+.banner-container {
+  position: relative;
+  z-index: 2; /* Nổi lên trên nền mờ */
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* --- Phía Trái: Nội dung --- */
+.banner-content {
+  flex: 1;
+  color: #fff;
+  padding-right: 50px;
+}
+
+.banner-tag {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.banner-title {
+  font-size: 3rem;
+  margin: 15px 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.banner-desc {
+  color: #cccccc;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Cắt bớt chữ nếu dài quá 3 dòng */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-read {
+  background-color: #00d293; /* Màu xanh lá Waka */
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-read:hover {
+  transform: scale(1.05);
+}
+
+.btn-heart {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* --- Phía Phải: Cụm Ảnh 3D --- */
+.banner-slider {
+  flex: 1;
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.images-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.stack-img {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 250px;
+  height: 350px;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: all 0.5s ease-in-out; /* Tạo hiệu ứng lướt mượt mà */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+/* Ảnh đang hiển thị */
+.img-active {
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.1); /* Phóng to và ở giữa */
+  z-index: 10;
+  opacity: 1;
+}
+
+/* Ảnh phía trước (bị mờ và nhỏ hơn nằm bên trái) */
+.img-prev {
+  left: 20%;
+  transform: translate(-50%, -50%) scale(0.8);
+  z-index: 5;
+  opacity: 0.5;
+}
+
+/* Ảnh phía sau (bị mờ và nhỏ hơn nằm bên phải) */
+.img-next {
+  left: 80%;
+  transform: translate(-50%, -50%) scale(0.8);
+  z-index: 5;
+  opacity: 0.5;
+}
+
+.slide-btn {
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 20; /* Luôn nằm trên cùng */
+}
+
+.prev-btn { position: absolute; left: -20px; }
+.next-btn { position: absolute; right: -20px; }

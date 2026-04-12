@@ -1,0 +1,38 @@
+/* =========================================
+   STYLE CHO FOOTER
+   ========================================= */
+.main-footer {
+    background-color: #141414; /* Màu nền đen tương đồng với Header */
+    border-top: 1px solid #222; /* Đường viền mỏng mờ ngăn cách phía trên */
+    padding: 40px 20px;
+    margin-top: 60px; /* Đẩy footer cách xa danh sách truyện ra một chút */
+    text-align: center; /* Căn giữa toàn bộ chữ */
+}
+
+.footer-content p {
+    color: #999;
+    font-size: 0.9rem;
+    margin: 8px 0;
+}
+
+.footer-links {
+    margin-top: 15px;
+}
+
+.footer-links a {
+    color: #1d4ed8; /* Màu xanh biển đậm cho các link */
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #3b82f6; /* Sáng lên khi di chuột vào */
+    text-decoration: underline;
+}
+
+.separator {
+    color: #555;
+    margin: 0 10px;
+}

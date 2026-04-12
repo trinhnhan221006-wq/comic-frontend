@@ -1,0 +1,109 @@
+/* =========================================
+   STYLE CHO HEADER DARK MODE
+   ========================================= */
+.main-header {
+  background-color: #141414; /* Nền đen nhám giống ảnh */
+  border-bottom: 1px solid #333;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between; /* Đẩy 2 cụm ra 2 mép */
+  align-items: center;
+}
+
+/* --- Cụm bên trái --- */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 40px; /* Khoảng cách giữa Logo và Menu */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  font-style: italic; /* Chữ nghiêng giống ảnh */
+  text-decoration: none;
+}
+
+.main-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #aaa;
+  padding: 20px 0; /* Căn chỉnh vùng click cho rộng */
+  border-bottom: 2px solid transparent; /* Chuẩn bị sẵn cái gạch chân tàng hình */
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #fff;
+  border-bottom: 2px solid #fff; /* Hiện gạch chân trắng khi active hoặc hover */
+}
+
+/* --- Cụm bên phải --- */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.icon-btn:hover {
+  color: #fff;
+}
+
+.auth-links {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.auth-btn {
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 20px; /* Nút bo góc tròn */
+  transition: all 0.2s;
+}
+
+.login-btn {
+  color: #aaa;
+  text-decoration: none;
+}
+
+.login-btn:hover {
+  color: #fff;
+}
+
+.register-btn {
+  background-color: #e50914; /* Màu đỏ nổi bật cho nút đăng ký */
+  color: #fff;
+  text-decoration: none;
+}
+
+.register-btn:hover {
+  background-color: #f6121d;
+}
