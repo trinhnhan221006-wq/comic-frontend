@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Header.css';
-
+import './Header.css'
 const Header = () => {
     return (
         <header className="main-header">
@@ -26,8 +25,8 @@ const Header = () => {
                     <button className="icon-btn" title="Tìm kiếm">🔍</button>
                     
                     <div className="auth-links">
-                        <Link to="/dang-nhap" className="auth-btn login-btn">Đăng nhập</Link>
-                        <Link to="/dang-ky" className="auth-btn register-btn">Đăng ký</Link>
+                        <Link to="/Dangnhap" className="auth-btn login-btn">Đăng nhập</Link>
+                        <Link to="/Dangki" className="auth-btn register-btn">Đăng ký</Link>
                     </div>
                 </div>
 

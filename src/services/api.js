@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://truyentranhlocal.local/wp-json/toocheke/v1';
+const API_URL = 'https://fortunate-resort.localsite.io/wp-admin';
 
 export const getComics = async () => {
     try {
