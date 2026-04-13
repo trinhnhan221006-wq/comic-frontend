@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { getComics } from "../services/api"; 
-import Banner from "../components/Banner"; 
+import { getComics } from "../services/api";
+import Banner from "../components/Banner";
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("thang");
   const [recentComics, setRecentComics] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,10 +31,10 @@ const Home = () => {
             return {
               id: item.id,
               // Giải mã tên truyện để hiện đúng tiếng Việt có dấu
-              title: decodeUnicode(item.title), 
-              image: item.thumbnail, 
-              views: "10K", 
-              likes: "1K", 
+              title: decodeUnicode(item.title),
+              image: item.thumbnail,
+              views: "10K",
+              likes: "1K",
               chapters: [{ name: "Chương 1", time: "Vừa xong" }],
             };
           });
@@ -50,17 +52,53 @@ const Home = () => {
 
   // Dữ liệu giả cho Cột Phải (Bảng xếp hạng)
   const topComics = [
-    { id: 101, title: "Bách Luyện Thành Thần", chapter: "Chapter 1295", views: "702K", image: "https://via.placeholder.com/50x65/222/fff?text=Top+1" },
-    { id: 102, title: "Đại Phụng Đả Canh Nhân", chapter: "Chapter 623", views: "529K", image: "https://via.placeholder.com/50x65/222/fff?text=Top+2" },
-    { id: 103, title: "Tinh Giáp Hồn Tướng", chapter: "Chapter 357", views: "531K", image: "https://via.placeholder.com/50x65/222/fff?text=Top+3" },
-    { id: 104, title: "Từ Kỵ Luật Ta Đây", chapter: "Chapter 132", views: "89K", image: "https://via.placeholder.com/50x65/222/fff?text=Top+4" },
-    { id: 105, title: "Mỗi Tuần Ta Có Một Nghề", chapter: "Chapter 891", views: "359K", image: "https://via.placeholder.com/50x65/222/fff?text=Top+5" },
+    {
+      id: 101,
+      title: "Bách Luyện Thành Thần",
+      chapter: "Chapter 1295",
+      views: "702K",
+      image: "https://via.placeholder.com/50x65/222/fff?text=Top+1",
+    },
+    {
+      id: 102,
+      title: "Đại Phụng Đả Canh Nhân",
+      chapter: "Chapter 623",
+      views: "529K",
+      image: "https://via.placeholder.com/50x65/222/fff?text=Top+2",
+    },
+    {
+      id: 103,
+      title: "Tinh Giáp Hồn Tướng",
+      chapter: "Chapter 357",
+      views: "531K",
+      image: "https://via.placeholder.com/50x65/222/fff?text=Top+3",
+    },
+    {
+      id: 104,
+      title: "Từ Kỵ Luật Ta Đây",
+      chapter: "Chapter 132",
+      views: "89K",
+      image: "https://via.placeholder.com/50x65/222/fff?text=Top+4",
+    },
+    {
+      id: 105,
+      title: "Mỗi Tuần Ta Có Một Nghề",
+      chapter: "Chapter 891",
+      views: "359K",
+      image: "https://via.placeholder.com/50x65/222/fff?text=Top+5",
+    },
   ];
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: "#121212",
+        minHeight: "100vh",
+        paddingBottom: "30px",
+      }}
+    >
       <Banner />
-      
+
       <div className="home-layout">
         {/* --- CỘT TRÁI: Truyện mới cập nhật --- */}
         <div className="main-content">
@@ -69,18 +107,25 @@ const Home = () => {
           </h2>
 
           {loading && (
-            <p style={{ color: "white", padding: "20px" }}>Đang kết nối đến WordPress...</p>
+            <p style={{ color: "white", padding: "20px" }}>
+              Đang kết nối đến WordPress...
+            </p>
           )}
 
           {!loading && recentComics.length === 0 && (
             <p style={{ color: "red", padding: "20px" }}>
-              Không tìm thấy truyện nào. Hãy kiểm tra lại API hoặc tạo truyện trong Toocheke!
+              Không tìm thấy truyện nào. Hãy kiểm tra lại API hoặc tạo truyện
+              trong Toocheke!
             </p>
           )}
 
           <div className="comic-grid">
             {recentComics.map((comic) => (
-              <div key={comic.id} className="comic-card-dark">
+              <div
+                key={comic.id}
+                className="comic-card-dark"
+                onClick={() => navigate(`/comic/${comic.id}`)}
+              >
                 <div className="card-thumb">
                   {/* Sử dụng ảnh thật từ thumbnail WordPress */}
                   <img src={comic.image} alt={comic.title} />
@@ -134,10 +179,16 @@ const Home = () => {
               {topComics.map((comic, index) => (
                 <div key={comic.id} className="top-item">
                   <div className="top-rank">0{index + 1}</div>
-                  <img src={comic.image} alt={comic.title} className="top-thumb" />
+                  <img
+                    src={comic.image}
+                    alt={comic.title}
+                    className="top-thumb"
+                  />
                   <div className="top-detail">
                     <h4>{comic.title}</h4>
-                    <p>{comic.chapter} • 👁️ {comic.views}</p>
+                    <p>
+                      {comic.chapter} • 👁️ {comic.views}
+                    </p>
                   </div>
                 </div>
               ))}

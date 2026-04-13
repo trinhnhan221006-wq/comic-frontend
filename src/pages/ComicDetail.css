@@ -1,0 +1,160 @@
+/* ================= TỔNG QUAN ================= */
+.detail-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  color: #fff;
+}
+.loading-text, .error-text { text-align: center; padding: 50px; font-size: 1.2rem; }
+.error-text { color: #e50914; }
+
+/* ================= 1. PHẦN THÔNG TIN ================= */
+.info-section {
+  display: flex;
+  gap: 30px;
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+/* Cột Trái */
+.info-left {
+  width: 250px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.comic-cover-img {
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+.btn-follow, .btn-notify, .btn-read-first {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  flex: 1;
+}
+.btn-follow:hover, .btn-notify:hover { background-color: #444; }
+.btn-read-first { background-color: #e50914; border: none; font-size: 1.1rem; }
+.btn-read-first:hover { background-color: #f6121d; }
+
+/* Cột Phải */
+.info-right { flex: 1; }
+.comic-title { font-size: 2rem; margin-top: 0; margin-bottom: 15px; }
+
+.tags { display: flex; gap: 10px; margin-bottom: 20px; }
+.tag {
+  background-color: #333;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.comic-summary {
+  color: #bbb;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.meta-info p { margin: 8px 0; color: #aaa; }
+.meta-info strong { color: #fff; width: 100px; display: inline-block; }
+.status-ongoing { color: #00c853; }
+
+/* ================= 2. PHẦN DANH SÁCH CHƯƠNG ================= */
+.chapter-section {
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+.section-header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+.section-header h2 { margin: 0; font-size: 1.2rem; }
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cột y hệt ảnh */
+  gap: 15px;
+}
+
+.chapter-card {
+  background-color: #222;
+  border: 1px solid #333;
+  padding: 15px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  transition: 0.2s;
+}
+.chapter-card:hover { background-color: #333; border-color: #555; }
+.chap-info { display: flex; flex-direction: column; gap: 5px; }
+.chap-number { font-weight: bold; font-size: 1.1rem; }
+.chap-time { font-size: 0.8rem; color: #888; }
+.chap-views { font-size: 0.85rem; color: #aaa; }
+
+.btn-show-all {
+  width: 100%;
+  background-color: transparent;
+  border: 1px dashed #555;
+  color: #aaa;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-show-all:hover { color: #fff; border-color: #fff; }
+
+/* ================= 3. PHẦN BÌNH LUẬN ================= */
+.comment-section {
+  background-color: #1a1a1a;
+  padding: 20px;
+  border-radius: 8px;
+}
+.section-header-simple { font-size: 1.2rem; margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+.comment-box {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+.comment-box textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  min-height: 40px;
+  color: #000;
+  font-family: inherit;
+}
+.btn-send {
+  background-color: #222;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}

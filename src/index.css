@@ -1,7 +1,7 @@
 body {
   margin: 0;
-  background-color: #0f0f0f; /* Nền đen cho toàn trang web */
-  color: #e0e0e0; /* Chữ màu xám sáng để dễ đọc */
+  background-color: #121212; /* Nền xám đen dịu mắt, bạn có thể đổi thành #000 nếu thích đen tuyền */
+  color: #ffffff; /* Chữ màu xám sáng để dễ đọc */
 }
 
 h1,

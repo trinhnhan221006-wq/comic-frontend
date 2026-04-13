@@ -1,24 +1,24 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Container from 'react-bootstrap/Container';
-import {Row,Col} from 'react-bootstrap';
+import Container from "react-bootstrap/Container";
+import { Row, Col } from "react-bootstrap";
 
 import Header from "./Header";
 import Footer from "./Footer";
 
-
 const LayoutMaster = () => {
-    return (
-        <>
-            <Container>
-                <Header />
-              < Row style={{height: "90vh"}}>
-              <Outlet />
-              </Row>
-                <Footer />
-            </Container>
-        </>
-    )
-}
+  <div
+    style={{ backgroundColor: "#121212", minHeight: "100vh", color: "#ffffff" }}
+  >
+    <Container>
+      <Header />
+      {/* Đổi height thành minHeight để lỡ danh sách truyện dài ra thì nền đen vẫn kéo dài theo */}
+      <Row style={{ minHeight: "90vh" }}>
+        <Outlet />
+      </Row>
+      <Footer />
+    </Container>
+  </div>;
+};
 
 export default LayoutMaster;
