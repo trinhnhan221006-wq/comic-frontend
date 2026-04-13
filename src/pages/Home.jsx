@@ -3,12 +3,15 @@ import { getComics } from "../services/api";
 import Banner from "../components/Banner";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("thang");
   const [recentComics, setRecentComics] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [topComics, setTopComics] = useState([]);
 
   // Hàm xử lý mã Unicode (ví dụ: \u00e0i -> ài)
   const decodeUnicode = (str) => {
@@ -50,44 +53,17 @@ const Home = () => {
     fetchWpData();
   }, []);
 
-  // Dữ liệu giả cho Cột Phải (Bảng xếp hạng)
-  const topComics = [
-    {
-      id: 101,
-      title: "Bách Luyện Thành Thần",
-      chapter: "Chapter 1295",
-      views: "702K",
-      image: "https://via.placeholder.com/50x65/222/fff?text=Top+1",
-    },
-    {
-      id: 102,
-      title: "Đại Phụng Đả Canh Nhân",
-      chapter: "Chapter 623",
-      views: "529K",
-      image: "https://via.placeholder.com/50x65/222/fff?text=Top+2",
-    },
-    {
-      id: 103,
-      title: "Tinh Giáp Hồn Tướng",
-      chapter: "Chapter 357",
-      views: "531K",
-      image: "https://via.placeholder.com/50x65/222/fff?text=Top+3",
-    },
-    {
-      id: 104,
-      title: "Từ Kỵ Luật Ta Đây",
-      chapter: "Chapter 132",
-      views: "89K",
-      image: "https://via.placeholder.com/50x65/222/fff?text=Top+4",
-    },
-    {
-      id: 105,
-      title: "Mỗi Tuần Ta Có Một Nghề",
-      chapter: "Chapter 891",
-      views: "359K",
-      image: "https://via.placeholder.com/50x65/222/fff?text=Top+5",
-    },
-  ];
+  useEffect(() => {
+  const fetchTopComics = async () => {
+    try {
+      const res = await axios.get('http://truyentranhlocal.local/wp-json/truyen/v1/top-truyen');
+      setTopComics(res.data);
+    } catch (error) {
+      console.error("Lỗi lấy bảng xếp hạng:", error);
+    }
+  };
+  fetchTopComics();
+}, []);
 
   return (
     <div
@@ -177,17 +153,26 @@ const Home = () => {
 
             <div className="top-list">
               {topComics.map((comic, index) => (
-                <div key={comic.id} className="top-item">
+                <div 
+                  key={comic.id} 
+                  className="top-item" 
+                  onClick={() => navigate(`/comic/${comic.id}`)} 
+                  style={{ cursor: 'pointer' }} // Thêm hiệu ứng trỏ chuột và bấm vào để đọc truyện
+                >
                   <div className="top-rank">0{index + 1}</div>
+                  
+                  {/* Sửa thành comic.thumbnail để lấy ảnh thật từ API */}
                   <img
-                    src={comic.image}
+                    src={comic.thumbnail || "https://via.placeholder.com/50x65/222/fff?text=No+Image"}
                     alt={comic.title}
                     className="top-thumb"
                   />
+                  
                   <div className="top-detail">
                     <h4>{comic.title}</h4>
                     <p>
-                      {comic.chapter} • 👁️ {comic.views}
+                      {/* Tạm ẩn Chapter, chỉ hiện View từ DB */}
+                      👁️ {comic.views} lượt xem
                     </p>
                   </div>
                 </div>

@@ -81,6 +81,25 @@ const Chapter = () => {
     }
   };
 
+  // Gọi API tăng view một cách thầm lặng khi Vui vào đọc truyện
+  useEffect(() => {
+    if (id) {
+      // Dùng axios.post vì nãy Nhân cấu hình 'methods' => 'POST'
+      axios
+        .post(`http://truyentranhlocal.local/wp-json/truyen/v1/tang-view/${id}`)
+        .then((response) => {
+          // Bật console log lên xem view nó nhảy chưa (xong rồi thì xóa đi cho sạch)
+          console.log(
+            "Đã tăng view! Số view hiện tại:",
+            response.data.new_views,
+          );
+        })
+        .catch((err) => {
+          console.error("Lỗi đếm view:", err);
+        });
+    }
+  }, [id]); // id ở đây là ID của bộ truyện (ví dụ: 64)
+
   return (
     <div
       style={{
