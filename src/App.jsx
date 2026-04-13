@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import Footer from './components/Footer'; // 1. Import Footer vào đây
 import Dangnhap from './components/Dangnhap';
 import Dangki from './components/Dangki';
+import ComicDetail from './pages/ComicDetail';
+import Chapter from './pages/Chapter';
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Dangnhap" element ={<Dangnhap/>}/>
           <Route path="/Dangki" element ={<Dangki/>}/>
+          <Route path="comic/:id" element={<ComicDetail />} />
+          <Route path="comic/:id/chapter/:chapterId" element={<Chapter />} />
           {/* Cấu hình sẵn để sau này làm Trang Chi tiết truyện */}
           {/* <Route path="/comic/:id" element={<ComicDetail />} /> */}
         </Routes>

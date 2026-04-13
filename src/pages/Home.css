@@ -190,3 +190,6 @@
   font-size: 0.8rem;
   margin: 0;
 }
+.home-layout {
+    background-color: transparent !important; /* Xóa màu nền trắng của nó, để lộ nền đen của body */
+}
