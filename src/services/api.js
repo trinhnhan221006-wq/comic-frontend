@@ -10,10 +10,13 @@ const api = axios.create({
 // 2. Giữ nguyên hàm getComics cũ của bạn cho trang Home
 export const getComics = async () => {
   try {
-    const response = await axios.get(`${API_URL}/manga-series`);
-    return response.data.series || [];
+    // Gọi thẳng vào API "hàng nhà làm" của Nhân
+    const response = await axios.get(`http://truyentranhlocal.local/wp-json/tu-tien/v1/truyen-trang-chu`);
+    
+    // API mới trả về thẳng mảng dữ liệu nên chỉ cần response.data là đủ
+    return response.data || [];
   } catch (error) {
-    console.error("Lỗi kết nối Toocheke:", error);
+    console.error("Lỗi kết nối:", error);
     return [];
   }
 };
@@ -46,6 +49,18 @@ export const getChapterImages = async (comicId, chapterId) => {
         console.error("Lỗi khi tải ảnh chương:", error);
         return [];
     }
+};
+
+// HÀM TĂNG VIEW (Dùng method POST cho khớp với functions.php)
+export const tangViewTruyen = async (comicId) => {
+  try {
+    const response = await axios.post(`http://truyentranhlocal.local/wp-json/truyen/v1/tang-view/${comicId}`);
+    console.log("Đã tăng view thành công:", response.data); // Log ra để dễ check
+    return response.data;
+  } catch (error) {
+    console.error("Lỗi khi tăng view:", error);
+    return null;
+  }
 };
 
 // 3. Bây giờ dòng này mới có tác dụng vì 'api' đã được tạo ở bước 1

@@ -5,6 +5,7 @@ import "./ComicDetail.css"; // Nhớ import file CSS nhé
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
 const ComicDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();

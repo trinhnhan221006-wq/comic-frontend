@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { tangViewTruyen } from '../services/api';
 
 const Chapter = () => {
   const { id, chapterId } = useParams();
@@ -11,7 +12,7 @@ const Chapter = () => {
   const [chapterList, setChapterList] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // ✅ FIX
 
-  // 🔥 LẤY ẢNH
+  // 🔥 LẤY ẢNH VÀ TĂNG VIEW
   useEffect(() => {
     const fetchImages = async () => {
       setLoading(true);
@@ -26,8 +27,16 @@ const Chapter = () => {
       setLoading(false);
     };
 
-    fetchImages();
-  }, [chapterId]);
+    fetchImages(); // Gọi API lấy ảnh
+
+    // 🚀 ĐẶT LỆNH TĂNG VIEW Ở NGAY ĐÂY:
+    // Đảm bảo có comicId thì mới gọi hàm để tránh lỗi
+    if (id) {
+        tangViewTruyen(id);
+    }
+
+  // 💡 Nhớ kẹp thêm comicId vào cái mảng ngoặc vuông này nhé
+  }, [chapterId, id]);
 
   // 🔥 DANH SÁCH CHƯƠNG
   useEffect(() => {
