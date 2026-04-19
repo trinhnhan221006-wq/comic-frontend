@@ -1,8 +1,10 @@
 /* ================= TỔNG QUAN ================= */
 .detail-container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 0 20px;
+  width: 100%;
+  max-width: 100%;     /* bỏ giới hạn 1200px */
+  margin: 0;           /* bỏ căn giữa */
+  padding: 20px 40px;  /* giữ khoảng cách cho đẹp */
+  box-sizing: border-box;
   color: #fff;
 }
 .loading-text, .error-text { text-align: center; padding: 50px; font-size: 1.2rem; }
@@ -13,9 +15,10 @@
   display: flex;
   gap: 30px;
   background-color: #1a1a1a;
-  padding: 20px;
+  padding: 20px 30px;
   border-radius: 8px;
   margin-bottom: 30px;
+  width: 100%;
 }
 
 /* Cột Trái */
