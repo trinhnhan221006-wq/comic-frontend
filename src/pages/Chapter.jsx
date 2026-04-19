@@ -100,6 +100,38 @@ const Chapter = () => {
     }
   }, [id]); // id ở đây là ID của bộ truyện (ví dụ: 64)
 
+  // THÊM ĐOẠN NÀY VÀO TRONG COMPONENT:
+  useEffect(() => {
+    const tangTuVi = async () => {
+      // Lấy Lệnh Bài
+      const token = localStorage.getItem("userToken");
+
+      // Nếu là "người phàm" (chưa đăng nhập) thì không cho tu luyện
+      if (!token) return;
+
+      try {
+        await axios.post(
+          "http://truyentranhlocal.local/wp-json/tu-tien/v1/cong-exp",
+          {
+            comic_id: id, // Gửi ID truyện (lấy từ useParams)
+            chapter_name: chapterData?.title, // Gửi tên chương đang đọc
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        // (Tùy chọn): Có thể dùng console.log để Vui kiểm tra ngầm xem điểm lên chưa
+        console.log("🔥 Đã hấp thu đan dược: Tu vi +10!");
+      } catch (error) {
+        console.error("Vận công tẩu hỏa nhập ma (Lỗi cộng điểm):", error);
+      }
+    };
+
+    // Gọi hàm này ngay khi truy cập vào trang Đọc Truyện
+    tangTuVi();
+  }, []);
+
   return (
     <div
       style={{

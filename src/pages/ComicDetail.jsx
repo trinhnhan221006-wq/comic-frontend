@@ -10,6 +10,8 @@ const ComicDetail = () => {
   const { id } = useParams();
   const [comic, setComic] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [loadingFollow, setLoadingFollow] = useState(false);
 
   // 1. State để lưu trạng thái "Đang theo dõi" hay chưa
   const [isFollowing, setIsFollowing] = useState(false);
@@ -26,24 +28,39 @@ const ComicDetail = () => {
     }
   }, [id]);
 
-  // 3. Hàm xử lý khi Vui click vào nút Theo Dõi
-  const handleFollowToggle = () => {
-    let followedComics =
-      JSON.parse(localStorage.getItem("followedComics")) || [];
+  // HÀM XỬ LÝ KHI BẤM NÚT THEO DÕI
+  const handleFollowComic = async () => {
+    const token = localStorage.getItem("userToken");
 
-    if (isFollowing) {
-      // Đang theo dõi mà bấm tiếp -> XÓA khỏi mảng (Bỏ theo dõi)
-      followedComics = followedComics.filter((comicId) => comicId !== id);
-    } else {
-      // Chưa theo dõi -> THÊM vào mảng
-      followedComics.push(id);
+    // Nếu chưa đăng nhập thì bắt đăng nhập
+    if (!token) {
+      alert("Đạo hữu cần đăng nhập để cất truyện vào Tàng Kinh Các!");
+      return;
     }
 
-    // Cập nhật lại vào bộ nhớ trình duyệt
-    localStorage.setItem("followedComics", JSON.stringify(followedComics));
+    setLoadingFollow(true);
+    try {
+      const response = await axios.post(
+        "http://truyentranhlocal.local/wp-json/tu-tien/v1/theo-doi",
+        {
+          comic_id: id, // Gửi ID của bộ truyện xuống
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Kẹp lệnh bài
+          },
+        },
+      );
 
-    // Đảo ngược trạng thái để đổi màu nút
-    setIsFollowing(!isFollowing);
+      // Nhận kết quả và cập nhật giao diện (tim đỏ / tim trắng)
+      setIsFollowed(response.data.is_followed);
+      alert(response.data.message);
+    } catch (error) {
+      console.error("Lỗi khi theo dõi:", error);
+      alert("Có lỗi xảy ra, không thể niệm chú!");
+    } finally {
+      setLoadingFollow(false);
+    }
   };
 
   useEffect(() => {
@@ -121,18 +138,22 @@ const ComicDetail = () => {
           />
           <div className="action-buttons">
             <button
-              onClick={handleFollowToggle}
+              onClick={handleFollowComic}
+              disabled={loadingFollow}
               style={{
-                backgroundColor: isFollowing ? "#555" : "#333", // Đã theo dõi thì sáng hơn chút
-                color: isFollowing ? "#4caf50" : "white", // Đã theo dõi thì hiện chữ màu xanh lá
+                backgroundColor: isFollowed ? "#e50914" : "#333", // Đã theo dõi thì màu đỏ, chưa thì màu xám
+                color: "white",
                 padding: "10px 20px",
                 border: "none",
                 borderRadius: "5px",
                 cursor: "pointer",
-                fontWeight: "bold",
               }}
             >
-              {isFollowing ? "✓ Đã Theo Dõi" : "❤️ Theo Dõi"}
+              {loadingFollow
+                ? "Đang niệm chú..."
+                : isFollowed
+                  ? "♥️ Đã Theo Dõi"
+                  : "🤍 Theo Dõi"}
             </button>
             <button className="btn-notify">🔔 Thông Báo</button>
           </div>

@@ -7,6 +7,7 @@ import Dangki from './components/Dangki';
 import Danhsach from './components/Danhsach';
 import ComicDetail from './pages/ComicDetail';
 import Chapter from './pages/Chapter';
+import Profile from './pages/Profile';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/Danhsach" element={<Danhsach />} />
           <Route path="/comic/:id" element={<ComicDetail />} />
           <Route path="/comic/:id/chapter/:chapterId" element={<Chapter />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
 
         {/* Footer luôn nằm dưới */}
