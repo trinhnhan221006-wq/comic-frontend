@@ -22,6 +22,7 @@ function App() {
           <Route path="/Dangnhap" element={<Dangnhap />} />
           <Route path="/Dangki" element={<Dangki />} />
           <Route path="/Danhsach" element={<Danhsach />} />
+          <Route path="/search" element={<Home />} />
           <Route path="/comic/:id" element={<ComicDetail />} />
           <Route path="/comic/:id/chapter/:chapterId" element={<Chapter />} />
         </Routes>
