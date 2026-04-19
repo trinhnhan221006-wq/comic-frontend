@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
-
     const navigate = useNavigate();
 
+    // 🔎 SEARCH
     const [showSearch, setShowSearch] = useState(false);
     const [keyword, setKeyword] = useState("");
 
-    // Danh sách gợi ý (có thể bỏ sau này khi dùng API)
     const comics = [
         "Naruto",
         "One Piece",
@@ -23,6 +22,26 @@ const Header = () => {
     const filteredComics = comics.filter((comic) =>
         comic.toLowerCase().includes(keyword.toLowerCase())
     );
+
+    // 🔐 LOGIN
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userPhone, setUserPhone] = useState('');
+
+    useEffect(() => {
+        const token = localStorage.getItem('userToken');
+        const phone = localStorage.getItem('userPhone');
+        if (token) {
+            setIsLoggedIn(true);
+            setUserPhone(phone || "");
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('userToken');
+        localStorage.removeItem('userPhone');
+        setIsLoggedIn(false);
+        navigate('/');
+    };
 
     return (
         <header className="main-header">
@@ -43,7 +62,7 @@ const Header = () => {
                 {/* RIGHT */}
                 <div className="header-right" style={{ position: "relative" }}>
 
-                    {/* NÚT SEARCH */}
+                    {/* 🔍 SEARCH */}
                     <button 
                         className="icon-btn" 
                         onClick={() => setShowSearch(!showSearch)}
@@ -51,7 +70,6 @@ const Header = () => {
                         🔍
                     </button>
 
-                    {/* SEARCH BOX */}
                     {showSearch && (
                         <div style={{
                             position: "absolute",
@@ -70,7 +88,6 @@ const Header = () => {
                                 value={keyword}
                                 onChange={(e) => setKeyword(e.target.value)}
 
-                                // 🔥 ENTER để search
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter" && keyword.trim() !== "") {
                                         navigate(`/search?q=${keyword}`);
@@ -87,7 +104,6 @@ const Header = () => {
                                 }}
                             />
 
-                            {/* KẾT QUẢ GỢI Ý */}
                             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                                 {keyword && (
                                     filteredComics.length > 0 ? (
@@ -118,11 +134,31 @@ const Header = () => {
                         </div>
                     )}
 
-                    {/* AUTH */}
-                    <div className="auth-links">
-                        <Link to="/Dangnhap" className="auth-btn login-btn">Đăng nhập</Link>
-                        <Link to="/Dangki" className="auth-btn register-btn">Đăng ký</Link>
-                    </div>
+                    {/* 🔐 AUTH */}
+                    {!isLoggedIn ? (
+                        <div className="auth-links">
+                            <Link to="/Dangnhap" className="auth-btn login-btn">Đăng nhập</Link>
+                            <Link to="/Dangki" className="auth-btn register-btn">Đăng ký</Link>
+                        </div>
+                    ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                            <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>
+                                Đạo hữu {userPhone ? userPhone.slice(-4) : ""}
+                            </span>
+
+                            <img 
+                                src="https://via.placeholder.com/40x40/e50914/ffffff?text=U" 
+                                alt="Avatar" 
+                                style={{ width: '38px', height: '38px', borderRadius: '50%', cursor: 'pointer' }} 
+                                onClick={() => navigate('/profile')} 
+                            />
+
+                            <button onClick={handleLogout}>
+                                Đăng xuất
+                            </button>
+                        </div>
+                    )}
+
                 </div>
 
             </div>

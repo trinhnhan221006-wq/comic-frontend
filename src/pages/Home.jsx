@@ -8,7 +8,6 @@ import axios from "axios";
 const Home = () => {
   const navigate = useNavigate();
 
-  // 🔎 Lấy keyword từ URL (?q=...)
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const keyword = query.get("q") || "";
@@ -19,21 +18,29 @@ const Home = () => {
   const [topComics, setTopComics] = useState([]);
   const [featuredComics, setFeaturedComics] = useState([]);
 
-  // 🔥 Decode Unicode
+  // 🔥 format số
+  const formatNumber = (num) => {
+    if (!num) return "0";
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+    if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+    return num;
+  };
+
+  // 🔥 decode unicode
   const decodeUnicode = (str) => {
     try {
       return JSON.parse(`"${str}"`);
-    } catch (e) {
+    } catch {
       return str;
     }
   };
 
-  // 🔥 FILTER SEARCH
+  // 🔎 FILTER
   const filteredComics = recentComics.filter((comic) =>
     comic.title.toLowerCase().includes(keyword.toLowerCase())
   );
 
-  // 🔄 Load truyện
+  // 🔄 LOAD TRUYỆN
   useEffect(() => {
     const fetchWpData = async () => {
       setLoading(true);
@@ -45,14 +52,18 @@ const Home = () => {
             id: item.id,
             title: decodeUnicode(item.title),
             image: item.thumbnail,
-            views: "10K",
-            likes: "1K",
-            chapters: [{ name: "Chương mới", time: "Vừa xong" }],
+
+            // ✅ lấy dữ liệu thật nếu có
+            views: item.views || 0,
+            likes: item.likes || 0,
+
+            // ✅ CHAP ĐẦU TIÊN
+            chapter: item.chapter || "Chương 1",
+            time: item.time || "Mới cập nhật",
           }));
 
           setRecentComics(formattedComics);
 
-          // 🎯 Banner (3 truyện đầu)
           const top3Comics = formattedComics.slice(0, 3);
 
           for (let comic of top3Comics) {
@@ -62,15 +73,14 @@ const Home = () => {
               );
               comic.description = descRes.data.description;
             } catch {
-              comic.description =
-                "Đang cập nhật nội dung cho bộ truyện này...";
+              comic.description = "Đang cập nhật nội dung...";
             }
           }
 
           setFeaturedComics(top3Comics);
         }
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu:", error);
+        console.error("Lỗi:", error);
       } finally {
         setLoading(false);
       }
@@ -79,7 +89,7 @@ const Home = () => {
     fetchWpData();
   }, []);
 
-  // 🔄 Load bảng xếp hạng
+  // 🔄 TOP
   useEffect(() => {
     const fetchTopComics = async () => {
       try {
@@ -88,21 +98,14 @@ const Home = () => {
         );
         setTopComics(res.data);
       } catch (error) {
-        console.error("Lỗi lấy bảng xếp hạng:", error);
+        console.error("Lỗi top:", error);
       }
     };
     fetchTopComics();
   }, []);
 
   return (
-    <div
-      style={{
-        backgroundColor: "#121212",
-        minHeight: "100vh",
-        paddingBottom: "30px",
-      }}
-    >
-      {/* Banner */}
+    <div style={{ backgroundColor: "#121212", minHeight: "100vh" }}>
       <Banner comics={featuredComics} />
 
       <div className="home-layout">
@@ -110,20 +113,14 @@ const Home = () => {
         <div className="main-content">
           <h2 className="section-title">
             <span>
-              {keyword ? `Kết quả tìm kiếm: "${keyword}"` : "Cập Nhật Gần Đây"}
+              {keyword ? `Kết quả: "${keyword}"` : "Cập nhật gần đây"}
             </span>
           </h2>
 
-          {loading && (
-            <p style={{ color: "white", padding: "20px" }}>
-              Đang tải dữ liệu...
-            </p>
-          )}
+          {loading && <p style={{ color: "white" }}>Đang tải...</p>}
 
           {!loading && filteredComics.length === 0 && (
-            <p style={{ color: "red", padding: "20px" }}>
-              Không tìm thấy truyện phù hợp
-            </p>
+            <p style={{ color: "red" }}>Không tìm thấy truyện</p>
           )}
 
           <div className="comic-grid">
@@ -135,21 +132,25 @@ const Home = () => {
               >
                 <div className="card-thumb">
                   <img src={comic.image} alt={comic.title} />
+
+                  {/* 👁️ ❤️ */}
                   <div className="card-stats">
-                    <span>👁️ {comic.views}</span>
-                    <span>❤️ {comic.likes}</span>
+                    <span>👁️ {formatNumber(comic.views)}</span>
+                    <span>❤️ {formatNumber(comic.likes)}</span>
                   </div>
                 </div>
 
                 <div className="card-info">
                   <h3>{comic.title}</h3>
-                  <div className="chapter-list">
-                    {comic.chapters.map((chap, index) => (
-                      <div key={index} className="chapter-item">
-                        <span className="chapter-name">{chap.name}</span>
-                        <span className="chapter-time">{chap.time}</span>
-                      </div>
-                    ))}
+
+                  {/* 🔥 CHAP HIỆN NGOÀI */}
+                  <div className="chapter-item">
+                    <span className="chapter-name">
+                      {comic.chapter}
+                    </span>
+                    <span className="chapter-time">
+                      {comic.time}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -158,63 +159,58 @@ const Home = () => {
         </div>
 
         {/* RIGHT */}
-        <div className="sidebar">
-          <div className="top-widget">
-            <div className="top-tabs">
-              <button
-                className={`tab-btn ${
-                  activeTab === "thang" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("thang")}
-              >
-                Top Tháng
-              </button>
-              <button
-                className={`tab-btn ${
-                  activeTab === "tuan" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("tuan")}
-              >
-                Top Tuần
-              </button>
-              <button
-                className={`tab-btn ${
-                  activeTab === "ngay" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("ngay")}
-              >
-                Top Ngày
-              </button>
-            </div>
+<div className="sidebar">
+  <div className="top-widget">
+    <div className="top-tabs">
+      <button
+        className={`tab-btn ${activeTab === "thang" ? "active" : ""}`}
+        onClick={() => setActiveTab("thang")}
+      >
+        Top Tháng
+      </button>
 
-            <div className="top-list">
-              {topComics.map((comic, index) => (
-                <div
-                  key={comic.id}
-                  className="top-item"
-                  onClick={() => navigate(`/comic/${comic.id}`)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="top-rank">0{index + 1}</div>
+      <button
+        className={`tab-btn ${activeTab === "tuan" ? "active" : ""}`}
+        onClick={() => setActiveTab("tuan")}
+      >
+        Top Tuần
+      </button>
 
-                  <img
-                    src={
-                      comic.thumbnail ||
-                      "https://via.placeholder.com/50x65/222/fff?text=No+Image"
-                    }
-                    alt={comic.title}
-                    className="top-thumb"
-                  />
+      <button
+        className={`tab-btn ${activeTab === "ngay" ? "active" : ""}`}
+        onClick={() => setActiveTab("ngay")}
+      >
+        Top Ngày
+      </button>
+    </div>
 
-                  <div className="top-detail">
-                    <h4>{comic.title}</h4>
-                    <p>👁️ {comic.views} lượt xem</p>
-                  </div>
-                </div>
-              ))}
+    <div className="top-list">
+      {topComics
+        .filter((comic) => comic.type === activeTab || !comic.type) 
+        .map((comic, index) => (
+          <div
+            key={comic.id}
+            className="top-item"
+            onClick={() => navigate(`/comic/${comic.id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="top-rank">0{index + 1}</div>
+
+            <img
+              src={comic.thumbnail}
+              alt={comic.title}
+              className="top-thumb"
+            />
+
+            <div className="top-detail">
+              <h4>{comic.title}</h4>
+              <p>👁️ {formatNumber(comic.views)}</p>
             </div>
           </div>
-        </div>
+        ))}
+    </div>
+  </div>
+</div>
       </div>
     </div>
   );
