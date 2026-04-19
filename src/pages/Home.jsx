@@ -12,6 +12,7 @@ const Home = () => {
   const [recentComics, setRecentComics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [topComics, setTopComics] = useState([]);
+  const [featuredComics, setFeaturedComics] = useState([]);
 
   // Hàm xử lý mã Unicode (ví dụ: \u00e0i -> ài)
   const decodeUnicode = (str) => {
@@ -27,21 +28,35 @@ const Home = () => {
       setLoading(true);
       try {
         const data = await getComics();
-        console.log("Dữ liệu Toocheke nhận được:", data);
 
         if (data && data.length > 0) {
           const formattedComics = data.map((item) => {
             return {
               id: item.id,
-              // Giải mã tên truyện để hiện đúng tiếng Việt có dấu
               title: decodeUnicode(item.title),
               image: item.thumbnail,
               views: "10K",
               likes: "1K",
-              chapters: [{ name: "Chương 1", time: "Vừa xong" }],
+              chapters: [{ name: "Chương mới", time: "Vừa xong" }],
             };
           });
           setRecentComics(formattedComics);
+
+          // 2. Lấy 3 bộ truyện mới nhất làm Banner
+          const top3Comics = formattedComics.slice(0, 3);
+          
+          // Dùng vòng lặp lấy mô tả cho cả 3 bộ truyện
+          for (let comic of top3Comics) {
+              try {
+                  const descRes = await axios.get(`http://truyentranhlocal.local/wp-json/truyen/v1/mota/${comic.id}`);
+                  comic.description = descRes.data.description;
+              } catch (err) {
+                  comic.description = "Đang cập nhật nội dung cho bộ truyện này...";
+              }
+          }
+          
+          // Lưu 3 bộ truyện đã có đủ mô tả vào State
+          setFeaturedComics(top3Comics);
         }
       } catch (error) {
         console.error("Lỗi khi tải dữ liệu:", error);
@@ -73,7 +88,8 @@ const Home = () => {
         paddingBottom: "30px",
       }}
     >
-      <Banner />
+      {/* Cấp dữ liệu 3 bộ truyện cho Banner xoay 3D */}
+      <Banner comics={featuredComics} />
 
       <div className="home-layout">
         {/* --- CỘT TRÁI: Truyện mới cập nhật --- */}
