@@ -1,235 +1,173 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { getChapterImages } from "../services/api";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Chapter = () => {
-  // Lấy cả ID truyện và số chương từ đường dẫn
   const { id, chapterId } = useParams();
   const navigate = useNavigate();
+
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chapterList, setChapterList] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false); // ✅ FIX
 
+  // 🔥 LẤY ẢNH
   useEffect(() => {
-    // 1. Dùng cái này để lấy dữ liệu ảnh
     const fetchImages = async () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://truyentranhlocal.local/wp-json/wp/v2/manga-chapter-api/${chapterId}`,
+          `http://truyentranhlocal.local/wp-json/wp/v2/manga-chapter-api/${chapterId}`
         );
-
-        // Lấy trực tiếp mảng ảnh mà Nhân vừa tạo ra
-        const imgUrls = res.data?.images_url || [];
-
-        console.log("Ảnh truyện 'tươi sống' đã về:", imgUrls);
-        setImages(imgUrls);
+        setImages(res.data?.images_url || []);
       } catch (err) {
-        console.error("Lỗi rồi hai bro ơi:", err);
+        console.error(err);
       }
       setLoading(false);
     };
+
     fetchImages();
   }, [chapterId]);
 
-  // 2. THÊM MỚI: Lấy danh sách toàn bộ chương của bộ truyện này
+  // 🔥 DANH SÁCH CHƯƠNG
   useEffect(() => {
     const fetchChapterList = async () => {
       try {
-        // Dùng cái link API Nhân đã thông nòng đêm qua
         const res = await axios.get(
-          `http://truyentranhlocal.local/wp-json/wp/v2/manga-chapter-api?manga_series=${id}`,
+          `http://truyentranhlocal.local/wp-json/wp/v2/manga-chapter-api?manga_series=${id}`
         );
         setChapterList(res.data);
       } catch (err) {
-        console.error("Lỗi lấy danh sách chương:", err);
+        console.error(err);
       }
     };
+
     fetchChapterList();
   }, [id]);
 
-  // 3. Hàm xử lý logic chuyển chương
-  const handleNavigate = (direction) => {
-    if (chapterList.length === 0) return;
+  // 🔥 CLICK NGOÀI ĐÓNG DROPDOWN
+  useEffect(() => {
+    const close = () => setShowDropdown(false);
 
-    // Tìm xem chương hiện tại đang đứng ở vị trí số mấy trong mảng
-    // Lưu ý: params từ URL là dạng chuỗi (string), nên cần ép kiểu (Number)
-    const currentIndex = chapterList.findIndex(
-      (chap) => chap.id === Number(chapterId),
+    if (showDropdown) {
+      document.addEventListener("click", close);
+    }
+
+    return () => document.removeEventListener("click", close);
+  }, [showDropdown]);
+
+  // 🔥 CHUYỂN CHƯƠNG
+  const handleNavigate = (type) => {
+    const index = chapterList.findIndex(
+      (c) => c.id === Number(chapterId)
     );
 
-    if (currentIndex === -1) return;
+    if (index === -1) return;
 
-    if (direction === "next") {
-      // Vì mảng đang xếp từ Mới -> Cũ (vd: [Chap 4, Chap 3, Chap 2, Chap 1])
-      // Đang ở Chap 1 (index 3), muốn sang Chap 2 thì phải LÙI index lại (index 2)
-      if (currentIndex > 0) {
-        const nextChapterId = chapterList[currentIndex - 1].id;
-        navigate(`/comic/${id}/chapter/${nextChapterId}`);
-      } else {
-        alert("Bạn đã đọc đến chương mới nhất!");
-      }
-    } else if (direction === "prev") {
-      // Đang ở Chap 2 (index 2), muốn về Chap 1 thì phải TĂNG index lên (index 3)
-      if (currentIndex < chapterList.length - 1) {
-        const prevChapterId = chapterList[currentIndex + 1].id;
-        navigate(`/comic/${id}/chapter/${prevChapterId}`);
-      } else {
-        alert("Đây là chương đầu tiên rồi!");
-      }
+    if (type === "next" && index > 0) {
+      navigate(`/comic/${id}/chapter/${chapterList[index - 1].id}`);
+    }
+
+    if (type === "prev" && index < chapterList.length - 1) {
+      navigate(`/comic/${id}/chapter/${chapterList[index + 1].id}`);
     }
   };
 
-  // Gọi API tăng view một cách thầm lặng khi Vui vào đọc truyện
-  useEffect(() => {
-    if (id) {
-      // Dùng axios.post vì nãy Nhân cấu hình 'methods' => 'POST'
-      axios
-        .post(`http://truyentranhlocal.local/wp-json/truyen/v1/tang-view/${id}`)
-        .then((response) => {
-          // Bật console log lên xem view nó nhảy chưa (xong rồi thì xóa đi cho sạch)
-          console.log(
-            "Đã tăng view! Số view hiện tại:",
-            response.data.new_views,
-          );
-        })
-        .catch((err) => {
-          console.error("Lỗi đếm view:", err);
-        });
-    }
-  }, [id]); // id ở đây là ID của bộ truyện (ví dụ: 64)
-
-  // THÊM ĐOẠN NÀY VÀO TRONG COMPONENT:
-  useEffect(() => {
-    const tangTuVi = async () => {
-      // Lấy Lệnh Bài
-      const token = localStorage.getItem("userToken");
-
-      // Nếu là "người phàm" (chưa đăng nhập) thì không cho tu luyện
-      if (!token) return;
-
-      try {
-        await axios.post(
-          "http://truyentranhlocal.local/wp-json/tu-tien/v1/cong-exp",
-          {
-            comic_id: id, // Gửi ID truyện (lấy từ useParams)
-            chapter_name: chapterData?.title, // Gửi tên chương đang đọc
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
-
-        // (Tùy chọn): Có thể dùng console.log để Vui kiểm tra ngầm xem điểm lên chưa
-        console.log("🔥 Đã hấp thu đan dược: Tu vi +10!");
-      } catch (error) {
-        console.error("Vận công tẩu hỏa nhập ma (Lỗi cộng điểm):", error);
-      }
-    };
-
-    // Gọi hàm này ngay khi truy cập vào trang Đọc Truyện
-    tangTuVi();
-  }, []);
-
   return (
-    <div
-      style={{
-        backgroundColor: "#000",
-        minHeight: "100vh",
-        paddingBottom: "50px",
-      }}
-    >
-      {/* THANH ĐIỀU HƯỚNG TRÊN CÙNG (Dính chặt trên top khi cuộn) */}
+    <div style={{ background: "#000", minHeight: "100vh" }}>
+      {/* HEADER */}
       <div
         style={{
-          backgroundColor: "#1a1a1a",
-          padding: "15px 20px",
+          background: "#111",
+          padding: 15,
           position: "sticky",
           top: 0,
           zIndex: 100,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderBottom: "1px solid #333",
         }}
       >
-        <Link
-          to={`/comic/${id}`}
-          style={{
-            color: "#e50914",
-            textDecoration: "none",
-            fontWeight: "bold",
-          }}
-        >
-          ⬅ Trở về truyện
-        </Link>
-        <span style={{ color: "#fff", fontSize: "1.2rem" }}>
-          Chương {chapterId}
-        </span>
-        <div style={{ color: "#888", fontSize: "0.9rem" }}>Báo lỗi</div>
+        {/* BREADCRUMB */}
+        <div style={{ color: "#aaa", marginBottom: 10 }}>
+          <span onClick={() => navigate("/")}>Trang Chủ</span> ›{" "}
+          <span onClick={() => navigate(`/comic/${id}`)}>Truyện</span> ›{" "}
+          <span style={{ color: "red" }}>Chương {chapterId}</span>
+        </div>
+
+        {/* CONTROLS */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 60 }}>
+          
+          {/* TRƯỚC */}
+          <div onClick={() => handleNavigate("prev")} style={{ cursor: "pointer", color: "#ccc", textAlign: "center" }}>
+            <div>⏮</div>
+            <small>TRƯỚC</small>
+          </div>
+
+          {/* ☰ DROPDOWN */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDropdown(!showDropdown);
+            }}
+            style={{ position: "relative", cursor: "pointer", color: "#ccc", textAlign: "center" }}
+          >
+            <div>☰</div>
+            <small>CHƯƠNG</small>
+
+            {showDropdown && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  position: "absolute",
+                  top: 40,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 250,
+                  maxHeight: 300,
+                  overflowY: "auto",
+                  background: "#1a1a1a",
+                  border: "1px solid #333",
+                  borderRadius: 6,
+                }}
+              >
+                {chapterList.map((c) => (
+                  <div
+                    key={c.id}
+                    onClick={() => {
+                      navigate(`/comic/${id}/chapter/${c.id}`);
+                      setShowDropdown(false);
+                    }}
+                    style={{
+                      padding: 10,
+                      borderBottom: "1px solid #333",
+                      color:
+                        c.id === Number(chapterId) ? "red" : "#ccc",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {c.title?.rendered || `Chương ${c.id}`}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* SAU */}
+          <div onClick={() => handleNavigate("next")} style={{ cursor: "pointer", color: "#ccc", textAlign: "center" }}>
+            <div>⏭</div>
+            <small>SAU</small>
+          </div>
+
+        </div>
       </div>
 
-      {/* KHU VỰC HIỂN THỊ ẢNH TRUYỆN */}
-      <div
-        style={{
-          maxWidth: "800px",
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      {/* ẢNH */}
+      <div style={{ maxWidth: 800, margin: "0 auto" }}>
         {loading ? (
-          <p style={{ color: "#fff", textAlign: "center", padding: "50px" }}>
-            Đang tải hình ảnh...
-          </p>
+          <p style={{ color: "#fff" }}>Loading...</p>
         ) : (
-          images.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`Trang ${index + 1}`}
-              style={{ width: "100%", display: "block", objectFit: "contain" }}
-            />
+          images.map((img, i) => (
+            <img key={i} src={img} style={{ width: "100%" }} />
           ))
         )}
-      </div>
-
-      {/* THANH ĐIỀU HƯỚNG DƯỚI CÙNG */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "20px",
-          marginTop: "40px",
-        }}
-      >
-        <button
-          onClick={() => handleNavigate("prev")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#333",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Chương Trước
-        </button>
-        <button
-          onClick={() => handleNavigate("next")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#e50914",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Chương Tiếp Theo
-        </button>
       </div>
     </div>
   );
