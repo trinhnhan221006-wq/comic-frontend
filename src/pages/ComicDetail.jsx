@@ -95,6 +95,13 @@ const ComicDetail = () => {
           }));
         }
 
+        if (data) {
+          localStorage.setItem('truyen_tam_thoi', JSON.stringify({
+            title: data.title?.rendered || data.title || "Truyện Đang Đọc",
+            image: data.thumbnail || "https://placehold.co/150x220/333/FFF?text=No+Image"
+          }));
+        }
+
         setComic(data);
       } catch (error) {
         console.error("Lỗi khi kéo dữ liệu thật:", error);

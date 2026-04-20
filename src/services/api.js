@@ -39,7 +39,6 @@ export const getComicDetail = async (id) => {
 export const getChapterImages = async (comicId, chapterId) => {
     try {
         // TẠM THỜI: Trả về mảng ảnh giả lập để test giao diện
-        // Sáng mai Nhân sẽ thay phần này bằng lệnh gọi axios lấy data thật từ WordPress
         return [
             "https://via.placeholder.com/800x1200/1a1a1a/e50914?text=Trang+1+-+Chuong+" + chapterId,
             "https://via.placeholder.com/800x1200/222222/ffffff?text=Trang+2",
@@ -61,6 +60,44 @@ export const tangViewTruyen = async (comicId) => {
     console.error("Lỗi khi tăng view:", error);
     return null;
   }
+};
+
+// HÀM GỌI API ĐỔI TÊN (Đã kẹp Lệnh bài)
+export const doiTenUser = async (newName) => {
+    try {
+        const token = localStorage.getItem('userToken'); // Lấy Token từ kho
+        const response = await axios.post(
+            `http://truyentranhlocal.local/wp-json/tu-tien/v1/doi-ten`, 
+            { new_name: newName }, // Chỉ cần gửi tên mới, Backend tự biết ID
+            { headers: { Authorization: `Bearer ${token}` } } // Nạp thẻ qua cổng
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Lỗi đổi tên:", error);
+        return null;
+    }
+};
+
+
+// HÀM CỘNG EXP (Dùng chuẩn API /cong-exp của bro)
+export const tangExpUser = async (comicId, chapterName) => {
+    try {
+        const token = localStorage.getItem('userToken');
+        if (!token) return null; 
+
+        const response = await axios.post(
+            `http://truyentranhlocal.local/wp-json/tu-tien/v1/cong-exp`, 
+            {
+                comic_id: comicId,          // Gửi ID truyện xuống
+                chapter_name: chapterName   // Gửi tên chương xuống
+            }, 
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Lỗi khi cộng tu vi:", error);
+        return null;
+    }
 };
 
 // 3. Bây giờ dòng này mới có tác dụng vì 'api' đã được tạo ở bước 1

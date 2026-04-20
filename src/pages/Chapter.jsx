@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { tangViewTruyen } from '../services/api';
+import { tangViewTruyen, tangExpUser } from '../services/api';
+import { getComicDetail } from '../services/api';
+
 
 const Chapter = () => {
   const { id, chapterId } = useParams();
@@ -31,12 +33,52 @@ const Chapter = () => {
 
     // 🚀 ĐẶT LỆNH TĂNG VIEW Ở NGAY ĐÂY:
     // Đảm bảo có comicId thì mới gọi hàm để tránh lỗi
-    if (id) {
-        tangViewTruyen(id);
+    if (id && chapterId) {
+      // 1. Tăng view cho truyện (Khách nào cũng tăng)
+      tangViewTruyen(id);
+      
+      // 2. Bơm EXP cho Đạo hữu (Đã đăng nhập mới tăng)
+      tangExpUser(id, `Chương ${chapterId}`);
     }
 
   // 💡 Nhớ kẹp thêm comicId vào cái mảng ngoặc vuông này nhé
   }, [chapterId, id]);
+// Lấy thêm các thông tin này từ API (hoặc truyền qua thẻ Link) để lưu lịch sử cho đẹp
+  // LƯU LỊCH SỬ ĐỌC (ĐÃ FIX LẤY ẢNH THẬT)
+  useEffect(() => {
+    const saveHistory = () => {
+        if (id && chapterId) {
+            // 1. Mở gói hàng tạm thời ra lấy ảnh thật và tên thật
+            const truyenTam = JSON.parse(localStorage.getItem('truyen_tam_thoi')) || {};
+            const realTitle = truyenTam.title || "Truyện Đang Đọc";
+            const realImage = truyenTam.image || "https://placehold.co/150x220/333/FFF?text=No+Image";
+
+            // 2. Lấy cuốn sổ lịch sử
+            let history = JSON.parse(localStorage.getItem('lich_su_doc')) || [];
+            
+            // 3. Xóa lịch sử cũ của bộ này đi (nếu có)
+            history = history.filter(item => item.comicId !== id);
+            
+            // 4. Ghi data THẬT lên dòng đầu tiên
+            history.unshift({
+                comicId: id,
+                chapterId: chapterId,
+                comicTitle: realTitle,           
+                chapterName: "Chương " + chapterId,
+                image: realImage,                
+                time: new Date().getTime()
+            });
+
+            // Chỉ giữ 50 bộ
+            if (history.length > 50) history.pop();
+            
+            // Cất sổ
+            localStorage.setItem('lich_su_doc', JSON.stringify(history));
+        }
+    };
+
+    saveHistory();
+  }, [id, chapterId]);
 
   // 🔥 DANH SÁCH CHƯƠNG
   useEffect(() => {
