@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 100%;     /* bỏ giới hạn 1200px */
   margin: 0;           /* bỏ căn giữa */
-  padding: 20px 40px;  /* giữ khoảng cách cho đẹp */
+  padding: 20px 40px;  
   box-sizing: border-box;
   color: #fff;
 }

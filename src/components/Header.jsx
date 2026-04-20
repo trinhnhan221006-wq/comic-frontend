@@ -23,9 +23,15 @@ const Header = () => {
     comic.toLowerCase().includes(keyword.toLowerCase()),
   );
 
+<<<<<<< HEAD
   // 🔐 LOGIN
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userPhone, setUserPhone] = useState("");
+=======
+    // 🔐 LOGIN
+    const [isLoggedIn, setIsLoggedIn] = useState(false);  {/* kiểm tra người dùng đã đăng nhập chưa */}
+    const [userPhone, setUserPhone] = useState('');
+>>>>>>> 40d9ee1d86e12696437adc3524294c71d9219609
 
   useEffect(() => {
     const token = localStorage.getItem("userToken");

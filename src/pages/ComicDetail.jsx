@@ -81,7 +81,7 @@ const ComicDetail = () => {
           data.description = descRes.data.description;
         }
 
-        // 2. Gọi API lấy danh sách chương thật từ "chân kinh" Nhân vừa tìm
+        // 2. Gọi API lấy danh sách chương thật
         const res = await axios.get(
           `http://truyentranhlocal.local/wp-json/wp/v2/manga-chapter-api?manga_series=${id}`,
         );
@@ -251,7 +251,6 @@ const ComicDetail = () => {
           <textarea placeholder="Người tiện tay vẽ hoa vẽ lá, Tôi đa tình tưởng đó là mùa xuân..."></textarea>
           <button className="btn-send">GỬI</button>
         </div>
-        {/* Chỗ này sau này ráp API bình luận vào */}
       </div>
     </div>
   );
