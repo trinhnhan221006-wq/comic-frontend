@@ -35,7 +35,7 @@ const Chapter = () => {
         tangViewTruyen(id);
     }
 
-  // 💡 Nhớ kẹp thêm comicId vào cái mảng ngoặc vuông này nhé
+  
   }, [chapterId, id]);
 
   // 🔥 DANH SÁCH CHƯƠNG
