@@ -1,7 +1,6 @@
 import React from "react";
 import "./Danhsach.css";
-
-function Danhsach() {
+ const Danhsach= () =>{
   return (
     <div className="container">
 

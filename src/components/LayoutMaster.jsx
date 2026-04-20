@@ -12,7 +12,6 @@ const LayoutMaster = () => {
   >
     <Container>
       <Header />
-      {/* Đổi height thành minHeight để lỡ danh sách truyện dài ra thì nền đen vẫn kéo dài theo */}
       <Row style={{ minHeight: "90vh" }}>
         <Outlet />
       </Row>

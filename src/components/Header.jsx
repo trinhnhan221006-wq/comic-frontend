@@ -24,7 +24,7 @@ const Header = () => {
     );
 
     // 🔐 LOGIN
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);  {/* kiểm tra người dùng đã đăng nhập chưa */}
     const [userPhone, setUserPhone] = useState('');
 
     useEffect(() => {
