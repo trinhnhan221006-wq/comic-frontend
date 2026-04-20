@@ -29,12 +29,12 @@
 }
 
 .section-title span {
-  border-bottom: 2px solid #e50914; /* Gạch đít màu đỏ giống Góc Truyện */
+  border-bottom: 2px solid #e50914;
   padding-bottom: 11px;
 }
 
 /* =========================================
-   CỘT TRÁI: LƯỚI TRUYỆN (Giống Góc Truyện Tranh)
+   CỘT TRÁI: LƯỚI TRUYỆN
    ========================================= */
 .comic-grid {
   display: grid;
@@ -109,7 +109,7 @@
 .chapter-time { color: #777; font-style: italic; }
 
 /* =========================================
-   CỘT PHẢI: BẢNG XẾP HẠNG (Giống NetTruyen)
+   CỘT PHẢI: BẢNG XẾP HẠNG
    ========================================= */
 .top-widget {
   background-color: #1a1a1a;
@@ -191,5 +191,5 @@
   margin: 0;
 }
 .home-layout {
-    background-color: transparent !important; /* Xóa màu nền trắng của nó, để lộ nền đen của body */
+    background-color: transparent !important;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getComicDetail } from "../services/api";
-import "./ComicDetail.css"; // Nhớ import file CSS nhé
+import "./ComicDetail.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

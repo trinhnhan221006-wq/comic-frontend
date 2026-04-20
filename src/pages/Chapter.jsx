@@ -41,7 +41,7 @@ const Chapter = () => {
       tangExpUser(id, `Chương ${chapterId}`);
     }
 
-  // 💡 Nhớ kẹp thêm comicId vào cái mảng ngoặc vuông này nhé
+  
   }, [chapterId, id]);
 // Lấy thêm các thông tin này từ API (hoặc truyền qua thẻ Link) để lưu lịch sử cho đẹp
   // LƯU LỊCH SỬ ĐỌC (ĐÃ FIX LẤY ẢNH THẬT)
