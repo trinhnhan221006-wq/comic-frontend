@@ -14,26 +14,18 @@ const ComicDetail = () => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [loadingFollow, setLoadingFollow] = useState(false);
 
-  // 1. State để lưu trạng thái "Đang theo dõi" hay chưa
-  const [isFollowing, setIsFollowing] = useState(false);
-
-  // 2. Kiểm tra bộ nhớ lúc vừa vào trang xem trước đó đã bấm theo dõi chưa
+// 🟢 2. Kiểm tra bộ nhớ ngay khi vào trang (Dùng isFollowed thay thế hoàn toàn)
   useEffect(() => {
-    // Lấy mảng ID các truyện đã theo dõi từ localStorage (nếu không có thì trả về mảng rỗng [])
-    const followedComics =
-      JSON.parse(localStorage.getItem("followedComics")) || [];
-
-    // Nếu ID của truyện hiện tại có nằm trong mảng đó -> Bật cờ "Đã theo dõi"
+    const followedComics = JSON.parse(localStorage.getItem("followedComics")) || [];
+    
+    // Nếu ID truyện hiện tại có trong danh sách theo dõi -> Bật tim đỏ
     if (followedComics.includes(id)) {
-      setIsFollowing(true);
+      setIsFollowed(true); 
     }
   }, [id]);
 
-  // HÀM XỬ LÝ KHI BẤM NÚT THEO DÕI
   const handleFollowComic = async () => {
     const token = localStorage.getItem("userToken");
-
-    // Nếu chưa đăng nhập thì bắt đăng nhập
     if (!token) {
       alert("Đạo hữu cần đăng nhập để cất truyện vào Tàng Kinh Các!");
       return;
@@ -43,22 +35,26 @@ const ComicDetail = () => {
     try {
       const response = await axios.post(
         "http://truyentranhlocal.local/wp-json/tu-tien/v1/theo-doi",
-        {
-          comic_id: id, // Gửi ID của bộ truyện xuống
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Kẹp lệnh bài
-          },
-        },
+        { comic_id: id },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Nhận kết quả và cập nhật giao diện (tim đỏ / tim trắng)
-      setIsFollowed(response.data.is_followed);
+      // 🟢 CẬP NHẬT TRẠNG THÁI MỚI NHẤT
+      const newStatus = response.data.is_followed;
+      setIsFollowed(newStatus);
+
+      // 🟢 ĐỒNG BỘ LOCALSTORAGE ĐỂ F5 KHÔNG MẤT DỮ LIỆU
+      let followed = JSON.parse(localStorage.getItem("followedComics")) || [];
+      if (newStatus) {
+        if (!followed.includes(id)) followed.push(id);
+      } else {
+        followed = followed.filter(item => item !== id);
+      }
+      localStorage.setItem("followedComics", JSON.stringify(followed));
+
       alert(response.data.message);
     } catch (error) {
       console.error("Lỗi khi theo dõi:", error);
-      alert("Có lỗi xảy ra, không thể niệm chú!");
     } finally {
       setLoadingFollow(false);
     }
@@ -187,7 +183,6 @@ const ComicDetail = () => {
             className="manga-description"
             style={{ color: "#ccc", marginTop: "20px", lineHeight: "1.6" }}
           >
-            {/* Dùng dangerouslySetInnerHTML để React dịch các thẻ xuống dòng của WordPress */}
             <div
               dangerouslySetInnerHTML={{
                 __html: comic?.description || "Chưa có tóm tắt nội dung.",
@@ -217,7 +212,6 @@ const ComicDetail = () => {
         </div>
 
         <div className="chapter-grid">
-          {/* Kiểm tra xem truyện có mảng chapters không rồi mới map() */}
           {comic.chapters && comic.chapters.length > 0 ? (
             comic.chapters.map((chap, index) => (
               <Link

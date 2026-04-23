@@ -148,57 +148,52 @@ const Home = () => {
           )}
 
           <div className="comic-grid">
-            {/* DÁN ĐÈ BẮT ĐẦU TỪ ĐÂY */}
             {filteredComics.map((comic) => (
-              <div key={comic.id} className="comic-card-pro">
+              <div key={comic.id} className="comic-card-dark">
                 {/* Phần ảnh bìa và Thống kê */}
                 <div
-                  className="comic-thumb-wrapper"
+                  className="card-thumb"
                   onClick={() => navigate(`/comic/${comic.id}`)}
                 >
                   <img
-                    src={comic.image}
+                    src={comic.image || "https://placehold.co/150x220/333/FFF?text=No+Image"}
                     alt={comic.title}
-                    className="comic-thumb"
                   />
 
                   {/* Thanh đen mờ dưới đáy ảnh hiện View và Follow */}
-                  <div className="comic-stats-overlay">
+                  <div className="card-stats">
                     <span>👁️ {formatNumber(comic.views)}</span>
                     <span>🔖 {formatNumber(comic.followers)}</span>
                   </div>
                 </div>
 
                 {/* Phần thông tin và 2 Chap mới nhất */}
-                <div className="comic-info-wrapper">
-                  <h5
-                    className="comic-title-pro"
-                    onClick={() => navigate(`/comic/${comic.id}`)}
-                  >
+                <div className="card-info">
+                  <h3 onClick={() => navigate(`/comic/${comic.id}`)} style={{ cursor: "pointer" }}>
                     {comic.title}
-                  </h5>
+                  </h3>
 
-                  <div className="comic-chapter-list">
+                  <div className="chapter-list">
                     {comic.chapters &&
                       comic.chapters.length > 0 &&
                       comic.chapters.map((chap, idx) => (
                         <div
                           key={idx}
-                          className="chapter-quick-link"
+                          className="chapter-item"
                           onClick={(e) => {
-                            e.stopPropagation(); // Ngăn click nhầm vào truyện
-                            navigate(`/comic/${comic.id}/chapter/${chap.id}`); // Điều hướng vô thẳng chap
+                            e.stopPropagation(); 
+                            navigate(`/comic/${comic.id}/chapter/${chap.id}`);
                           }}
+                          style={{ cursor: "pointer" }}
                         >
-                          <span className="chap-name">{chap.name}</span>
-                          <span className="chap-time">{chap.time}</span>
+                          <span className="chapter-name">{chap.name}</span>
+                          <span className="chapter-time">{chap.time}</span>
                         </div>
                       ))}
                   </div>
                 </div>
               </div>
             ))}
-            {/* KẾT THÚC DÁN ĐÈ TẠI ĐÂY */}
           </div>
         </div>
 
@@ -241,7 +236,7 @@ const Home = () => {
                     <div className="top-rank">0{index + 1}</div>
 
                     <img
-                      src={comic.thumbnail}
+                      src={comic.thumbnail || "https://placehold.co/50x65/333/FFF?text=Top"}
                       alt={comic.title}
                       className="top-thumb"
                     />
@@ -256,7 +251,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {/* THANH CHUYỂN TRANG (Đã fix lỗi không click được) */}
+      {/* THANH CHUYỂN TRANG*/}
       <div
         style={{
           display: "flex",

@@ -1,6 +1,6 @@
-/* =========================================
-   BỐ CỤC CHUNG TRANG CHỦ (2 CỘT)
-   ========================================= */
+/* =======================
+   BỐ CỤC CHUNG TRANG CHỦ
+   ======================= */
 .home-layout {
   max-width: 1200px;
   margin: 30px auto;
@@ -33,80 +33,111 @@
   padding-bottom: 11px;
 }
 
-/* =========================================
-   CỘT TRÁI: LƯỚI TRUYỆN
-   ========================================= */
+/* =======================
+   CỘT TRÁI: LƯỚI TRUYỆN 
+   ======================= */
 .comic-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
+  gap: 20px; /* Tăng khoảng cách cho thoáng */
 }
 
+/* Đây là cái "Khung truyện" bro cần fix */
 .comic-card-dark {
   background-color: #1a1a1a;
-  border-radius: 5px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
   cursor: pointer;
+  border: 1px solid #333; /* Tạo viền mờ cho khung rõ ràng */
+  display: flex;
+  flex-direction: column;
 }
 
 .comic-card-dark:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  border-color: #e50914; /* Đổi viền đỏ khi di chuột vào */
+  box-shadow: 0 5px 15px rgba(229, 9, 20, 0.2);
 }
 
 .card-thumb {
   position: relative;
-  height: 240px;
+  width: 100%;
+  padding-top: 140%; /* Ép tỉ lệ ảnh dọc chuẩn truyện tranh */
 }
 
 .card-thumb img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Khối đen mờ che đè lên chân ảnh để hiện View/Like */
+/* View và Like hiện trên chân ảnh */
 .card-stats {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.9));
-  padding: 20px 10px 5px;
-  color: #ccc;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+  padding: 15px 10px 5px;
+  color: #fff; /* Ép màu trắng cho rõ */
   font-size: 0.75rem;
   display: flex;
   gap: 10px;
+  z-index: 2;
 }
 
 .card-info {
-  padding: 10px;
+  padding: 12px;
+  flex-grow: 1;
 }
 
+/* FIX LỖI TÀNG HÌNH: Tên truyện */
 .card-info h3 {
-  color: #fff;
-  font-size: 0.95rem;
-  margin: 0 0 10px 0;
-  white-space: nowrap;
+  color: #ffffff !important; /* Trắng rực rỡ */
+  font-size: 1rem;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  line-height: 1.4;
+  /* Giới hạn 2 dòng tên truyện */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .chapter-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .chapter-item {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
+  align-items: center;
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 2px 0;
 }
 
-.chapter-name { color: #fff; }
-.chapter-time { color: #777; font-style: italic; }
+/* FIX LỖI TÀNG HÌNH: Tên chương */
+.chapter-name {
+  color: #ff4d4d !important; /* Màu đỏ nhạt cho nổi bật */
+}
+
+.chapter-time {
+  color: #888;
+  font-size: 0.75rem;
+}
+
+.chapter-item:hover .chapter-name {
+  color: #fff !important; /* Rực trắng khi di chuột vào chương */
+}
 
 /* =========================================
    CỘT PHẢI: BẢNG XẾP HẠNG
@@ -168,9 +199,15 @@
 }
 
 /* Số 1, 2, 3 có màu nổi bật */
-.top-item:nth-child(1) .top-rank { color: #e50914; }
-.top-item:nth-child(2) .top-rank { color: #00c853; }
-.top-item:nth-child(3) .top-rank { color: #29b6f6; }
+.top-item:nth-child(1) .top-rank {
+  color: #e50914;
+}
+.top-item:nth-child(2) .top-rank {
+  color: #00c853;
+}
+.top-item:nth-child(3) .top-rank {
+  color: #29b6f6;
+}
 
 .top-thumb {
   width: 50px;
@@ -191,5 +228,19 @@
   margin: 0;
 }
 .home-layout {
-    background-color: transparent !important;
+  background-color: transparent !important;
+}
+/* Ép màu trắng cho tên truyện và thông tin chương ở trang chủ */
+.comic-item h3,
+.comic-title,
+.chapter-link,
+.comic-info span {
+  color: #ffffff !important; /* Màu trắng rực rỡ */
+  text-decoration: none;
+}
+
+.comic-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #bbb; /* Màu xám nhạt cho phần chapter */
 }

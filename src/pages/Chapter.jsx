@@ -12,7 +12,7 @@ const Chapter = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chapterList, setChapterList] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false); // ✅ FIX
+  const [showDropdown, setShowDropdown] = useState(false);
 
   // 🔥 LẤY ẢNH VÀ TĂNG VIEW
   useEffect(() => {
@@ -32,7 +32,6 @@ const Chapter = () => {
     fetchImages(); // Gọi API lấy ảnh
 
     // 🚀 ĐẶT LỆNH TĂNG VIEW Ở NGAY ĐÂY:
-    // Đảm bảo có comicId thì mới gọi hàm để tránh lỗi
     if (id && chapterId) {
       // 1. Tăng view cho truyện (Khách nào cũng tăng)
       tangViewTruyen(id);
@@ -43,8 +42,7 @@ const Chapter = () => {
 
   
   }, [chapterId, id]);
-// Lấy thêm các thông tin này từ API (hoặc truyền qua thẻ Link) để lưu lịch sử cho đẹp
-  // LƯU LỊCH SỬ ĐỌC (ĐÃ FIX LẤY ẢNH THẬT)
+  // LƯU LỊCH SỬ ĐỌC
   useEffect(() => {
     const saveHistory = () => {
         if (id && chapterId) {

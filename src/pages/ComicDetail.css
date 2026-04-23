@@ -1,8 +1,7 @@
 /* ================= TỔNG QUAN ================= */
 .detail-container {
   width: 100%;
-  max-width: 100%;     /* bỏ giới hạn 1200px */
-  margin: 0;           /* bỏ căn giữa */
+  max-width: 100%;     
   padding: 20px 40px;  
   box-sizing: border-box;
   color: #fff;
@@ -93,7 +92,7 @@
 
 .chapter-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cột y hệt ảnh */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 15px;
 }
 
